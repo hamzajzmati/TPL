@@ -1,2 +1,0 @@
-# TPL
-Table Programming Language
