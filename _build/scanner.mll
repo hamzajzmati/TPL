@@ -46,5 +46,5 @@ and multilinecomment = parse
 | _    { multilinecomment lexbuf }
 
 and singlelinecomment = parse
-  "//" { token lexbuf }
+  ['\r' '\n'] { token lexbuf }
 | _    { singlelinecomment lexbuf }
