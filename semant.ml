@@ -1,4 +1,4 @@
-(* Semantic checking for the MicroC compiler *)
+(* Semantic checking for the TPL compiler *)
 
 open Ast
 
@@ -51,9 +51,11 @@ let check (globals, functions) =
      { typ = Void; fname = "print"; formals = [(Int, "x")];
        locals = []; body = [] } (StringMap.add "printb"
      { typ = Void; fname = "printb"; formals = [(Bool, "x")];
+       locals = []; body = [] } (StringMap.add "printfloat" 
+     { typ = Void; fname = "printfloat"; formals = [(Float, "x")];
        locals = []; body = [] } (StringMap.singleton "printbig"
      { typ = Void; fname = "printbig"; formals = [(Int, "x")];
-       locals = []; body = [] }))
+       locals = []; body = [] } )))
    in
      
   let function_decls = List.fold_left (fun m fd -> StringMap.add fd.fname fd m)
@@ -93,11 +95,14 @@ let check (globals, functions) =
     (* Return the type of an expression or throw an exception *)
     let rec expr = function
 	Literal _ -> Int
+      | Floatliteral _ -> Float
+      | Strliteral _ -> String
       | BoolLit _ -> Bool
       | Id s -> type_of_identifier s
       | Binop(e1, op, e2) as e -> let t1 = expr e1 and t2 = expr e2 in
 	(match op with
           Add | Sub | Mult | Div when t1 = Int && t2 = Int -> Int
+    |  Add | Sub | Mult | Div  when t1 = Float && t2 = Float -> Float
 	| Equal | Neq when t1 = t2 -> Bool
 	| Less | Leq | Greater | Geq when t1 = Int && t2 = Int -> Bool
 	| And | Or when t1 = Bool && t2 = Bool -> Bool

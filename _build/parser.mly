@@ -1,14 +1,16 @@
-/* Ocamlyacc parser for MicroC */
+/* Ocamlyacc parser for TPL */
 
 %{
 open Ast
 %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE COMMA
+%token SEMI LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET COMMA DOT
 %token PLUS MINUS TIMES DIVIDE ASSIGN NOT
 %token EQ NEQ LT LEQ GT GEQ TRUE FALSE AND OR
-%token RETURN IF ELSE FOR WHILE INT BOOL VOID
+%token RETURN IF ELSE FOR WHILE INT BOOL VOID STRING FLOAT INTARRAY FLOATARRAY STRARRAY TABLE
 %token <int> LITERAL
+%token <string> STRLITERAL
+%token <string> FLOATLITERAL
 %token <string> ID
 %token EOF
 
@@ -56,6 +58,12 @@ typ:
     INT { Int }
   | BOOL { Bool }
   | VOID { Void }
+  | FLOAT {Float}
+  | STRING {String}
+  | STRARRAY {Strarray}
+  | INTARRAY {Intarray}
+  | FLOATARRAY {Floatarray}
+  | TABLE {Table}
 
 vdecl_list:
     /* nothing */    { [] }
@@ -84,7 +92,10 @@ expr_opt:
   | expr          { $1 }
 
 expr:
-    LITERAL          { Literal($1) }
+    ID LBRACKET LITERAL RBRACKET  {IndexValue($1 , $3)}
+  | LITERAL          { Literal($1) }
+  | STRLITERAL       { Strliteral($1) }
+  | FLOATLITERAL     { Floatliteral (float_of_string $1) }
   | TRUE             { BoolLit(true) }
   | FALSE            { BoolLit(false) }
   | ID               { Id($1) }

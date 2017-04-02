@@ -4,7 +4,10 @@ type token =
   | RPAREN
   | LBRACE
   | RBRACE
+  | LBRACKET
+  | RBRACKET
   | COMMA
+  | DOT
   | PLUS
   | MINUS
   | TIMES
@@ -29,7 +32,15 @@ type token =
   | INT
   | BOOL
   | VOID
+  | STRING
+  | FLOAT
+  | INTARRAY
+  | FLOATARRAY
+  | STRARRAY
+  | TABLE
   | LITERAL of (int)
+  | STRLITERAL of (string)
+  | FLOATLITERAL of (string)
   | ID of (string)
   | EOF
 

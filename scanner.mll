@@ -1,16 +1,23 @@
-(* Ocamllex scanner for MicroC *)
+(* Ocamllex scanner for TPL *)
 
 { open Parser }
 
+
+(* Add flaot and good string support *)
 rule token = parse
   [' ' '\t' '\r' '\n'] { token lexbuf } (* Whitespace *)
 | "/*"     { multilinecomment lexbuf }           (* Comments *)
 | "//"     { singlelinecomment lexbuf }           (* Comments *)
+| '"' ([^ '"']* as strliteral) '"' { STRLITERAL(strliteral) }
+| (['0'-'9']* '.' ['0'-'9']*) as l   { FLOATLITERAL(l)}
 | '('      { LPAREN }
 | ')'      { RPAREN }
 | '{'      { LBRACE }
 | '}'      { RBRACE }
+| '['      { LBRACKET }
+| ']'      { RBRACKET }
 | ';'      { SEMI }
+| '.'      { DOT }
 | ','      { COMMA }
 | '+'      { PLUS }
 | '-'      { MINUS }
@@ -31,7 +38,13 @@ rule token = parse
 | "for"    { FOR }
 | "while"  { WHILE }
 | "return" { RETURN }
+| "array int" { INTARRAY }
+| "array float" { FLOATARRAY }
+| "array string" { STRARRAY } 
 | "int"    { INT }
+| "string" { STRING }
+| "float" { FLOAT }
+| "table" { TABLE }
 | "bool"   { BOOL }
 | "void"   { VOID }
 | "true"   { TRUE }

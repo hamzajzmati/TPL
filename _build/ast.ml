@@ -1,18 +1,21 @@
 (* Abstract Syntax Tree and functions for printing it *)
 
-type op = Add | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
+type op = Add | FAdd | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
           And | Or
 
 type uop = Neg | Not
 
-type typ = Int | Bool | Void
+type typ = Int | Bool | Void | Table | Float | String | Strarray | Intarray | Floatarray
 
 type bind = typ * string
 
 type expr =
     Literal of int
+  | Strliteral of string
+  | Floatliteral of float
   | BoolLit of bool
   | Id of string
+  | IndexValue of string * int
   | Binop of expr * op * expr
   | Unop of uop * expr
   | Assign of string * expr
@@ -59,6 +62,8 @@ let string_of_uop = function
 
 let rec string_of_expr = function
     Literal(l) -> string_of_int l
+  | Floatliteral(f) -> string_of_float f
+  | Strliteral(s) -> s 
   | BoolLit(true) -> "true"
   | BoolLit(false) -> "false"
   | Id(s) -> s
@@ -87,6 +92,12 @@ let string_of_typ = function
     Int -> "int"
   | Bool -> "bool"
   | Void -> "void"
+  | Float -> "float"
+  | String -> "string"
+  | Strarray -> "strarray" 
+  | Intarray -> "intarray" 
+  | Floatarray -> "floatarray"
+  | Table -> "table"
 
 let string_of_vdecl (t, id) = string_of_typ t ^ " " ^ id ^ ";\n"
 
