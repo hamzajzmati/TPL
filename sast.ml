@@ -1,15 +1,6 @@
-(* Abstract Syntax Tree and functions for printing it *)
+Open Ast
 
-type op = Add  | Sub | Mult | Div | Equal | Neq | Less | Leq | Greater | Geq |
-          And | Or
-
-type uop = Neg | Not
-
-type typ = Int | Bool | Void | Table | Float | String | Strarray | Intarray | Floatarray
-
-type bind = typ * string
-
-type expr =
+type expr_detail =
     Literal of int
   | Strliteral of string
   | Floatliteral of float
@@ -21,6 +12,9 @@ type expr =
   | Assign of string * expr
   | Call of string * expr list
   | Noexpr
+  
+type expr = 
+    expr_detial * Ast.typ
 
 type stmt =
     Block of stmt list

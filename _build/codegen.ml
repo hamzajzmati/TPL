@@ -25,7 +25,7 @@ let translate (globals, functions) =
   and i1_t   = L.i1_type   context
   and void_t = L.void_type context
   (* and string_t = ???? context  TODO *)
-  and float_t = L.float_type   context in
+  and float_t = L.double_type   context in
 
   let ltype_of_typ = function
       A.Int -> i32_t
@@ -45,10 +45,6 @@ let translate (globals, functions) =
   (* Declare printf(), which the print built-in function will call *)
   let printf_t = L.var_arg_function_type i32_t [| L.pointer_type i8_t |] in
   let printf_func = L.declare_function "printf" printf_t the_module in
-
-  (* Declare the built-in printbig() function *)
-  let printbig_t = L.function_type i32_t [| i32_t |] in
-  let printbig_func = L.declare_function "printbig" printbig_t the_module in
 
   (* Define each function (arguments and return type) so we can call it *)
   let function_decls =
@@ -128,8 +124,6 @@ let translate (globals, functions) =
       | A.Call ("printfloat", [e]) ->
 	  L.build_call printf_func [| float_format_str ; (expr builder e) |]
 	    "printf" builder
-      | A.Call ("printbig", [e]) ->
-	  L.build_call printbig_func [| (expr builder e) |] "printbig" builder
       | A.Call (f, act) ->
          let (fdef, fdecl) = StringMap.find f function_decls in
 	 let actuals = List.rev (List.map (expr builder) (List.rev act)) in

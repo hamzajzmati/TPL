@@ -180,7 +180,7 @@ Installation under OS X
 To run and test:
 
 $ make
-ocamlbuild -use-ocamlfind -pkgs llvm,llvm.analysis -cflags -w,+a-4 microc.native
+ocamlbuild -use-ocamlfind -pkgs llvm,llvm.analysis -cflags -w,+a-4 tpl.native
 Finished, 22 targets (0 cached) in 00:00:01.
 cc    -c -o printbig.o printbig.c
 $ ./testall.sh
