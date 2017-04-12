@@ -40,8 +40,14 @@ let check (globals, functions) =
 
   (**** Checking Functions ****)
 
-  if List.mem "print" (List.map (fun fd -> fd.fname) functions)
-  then raise (Failure ("function print may not be defined")) else ();
+  
+  let predefined_functions = [ "print" ; "printb" ; "printfloat" ] in 
+
+  let check_is_predifined x = if List.mem x (List.map (fun fd -> fd.fname) functions)
+  then raise (Failure ("function " ^ x ^ " may not be defined")) else () in 
+
+  List.iter check_is_predifined predefined_functions; 
+  
 
   report_duplicate (fun n -> "duplicate function " ^ n)
     (List.map (fun fd -> fd.fname) functions);
