@@ -53,6 +53,7 @@ let check (globals, functions) =
     (List.map (fun fd -> fd.fname) functions);
 
   (* Function declaration for a named function *)
+  (* HJ, Add the definitions of other predefined functions here *)
   let built_in_decls =  StringMap.add "print"
      { typ = Void; fname = "print"; formals = [(Int, "x")];
        locals = []; body = [] } (StringMap.add "printb"
